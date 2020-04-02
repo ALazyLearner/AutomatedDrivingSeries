@@ -2,7 +2,7 @@
 
 决定还是分两篇来写吧！本篇主要介绍INS数据的可视化及基本分析。
 
-![cas](37gnss-localizer/cas.png)
+![cas](37gnss-localizer.assets/cas.png)
 <!-- more-->
 
 接上一篇：
@@ -23,17 +23,17 @@ PlotJugger是ROS提供的的插件工具，安装之后可以通过`rosrun plotj
 
 **对于角速度而言，在静止情况下应该都为0，加速度水平的话，y轴为0，z轴为重力加速度，基本为1。**
 
-![image-20200109192510507](37gnss-localizer/image-20200110165838993.png)
+![image-20200109192510507](37gnss-localizer.assets/image-20200110165838993.png)
 
 ### 2、位置分析
 
 左侧选定经纬度字段（也可以是utm_east、utm_north字段），鼠标右键拖到右侧plot中可以明显看到小车INS记录的运动轨迹，点击启动按钮，观察红色点的变动情况，可跟踪小车运行状态。显然这里我们的GPS轨迹是符合预期的。
 
-![image-20200109192510507](37gnss-localizer/image-20200109192510507-1578646938940.png)
+![image-20200109192510507](37gnss-localizer.assets/image-20200109192510507-1578646938940.png)
 
 ### 3、姿态数据分析
 
-![image-20200109192909463](37gnss-localizer/image-20200109192909463.png)
+![image-20200109192909463](37gnss-localizer.assets/image-20200109192909463.png)
 
 继续查看yaw角，起始位置一直保持yaw角为160度，我们需要关注的是yaw角变化的一些节点，一般来说小车是在进行转向操作。
 
@@ -49,7 +49,7 @@ PlotJugger是ROS提供的的插件工具，安装之后可以通过`rosrun plotj
 
 最后我们还可以查看一下测试路面的坡度变化，这里x轴朝向车头，坡度变化对应的是pitch角，也符合我们的预期。
 
-![image-20200109194131616](37gnss-localizer/image-20200109194131616.png)
+![image-20200109194131616](37gnss-localizer.assets/image-20200109194131616.png)
 
 > 这里提醒一下,车子在平面上加速的时候,轮胎的传动轴会有扭矩作用,让车轮转动.车子本身会有反扭矩,这个反作用力在传动轴上会有一个向上或者向下的作用力,从而使车头向上或向下.这个角度虽然肉眼看不出来,但车身的传感器能够感受到,从而产生一个较大的pitch,此pitch角可能会被误当做一个坡度信息.
 >
@@ -59,7 +59,7 @@ PlotJugger是ROS提供的的插件工具，安装之后可以通过`rosrun plotj
 
 这里我们完成一个简单的测试程序，在地图上观察GPS轨迹和IMU朝向是否正常。
 
-![image-20200109195037217](37gnss-localizer/image-20200109195037217.png)
+![image-20200109195037217](37gnss-localizer.assets/image-20200109195037217.png)
 
 ### 1、基本思路
 
@@ -251,11 +251,11 @@ static inline double rad2deg(const double &rad) {
 
 ​	可以看到小车运动轨迹符合预期，虽然数据质量确实不太好。姿态yaw角朝车头方向，**这里惯导输出的yaw角可能会和车头有一个固定的夹角**（M_PI或者M_PI/2），需要注意。我这里面对ins输出的yaw角转为弧度之后，取M_PI/2 - yaw才拿到车头方向。
 
-![image-20200109195054318](37gnss-localizer/image-20200109195054318.png)
+![image-20200109195054318](37gnss-localizer.assets/image-20200109195054318.png)
 
 综合分析，在园区等GPS信号不太好的情况下，组合导航就显得比较鸡肋了，但是用来作为点云定位初始化还是比较普遍的。
 
-![image-20200109195107057](37gnss-localizer/image-20200109195107057.png)
+![image-20200109195107057](37gnss-localizer.assets/image-20200109195107057.png)
 
 ## 三、致谢
 

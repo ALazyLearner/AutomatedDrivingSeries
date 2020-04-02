@@ -2,7 +2,7 @@
 
 在第二篇中我们划分好了点云的网格地图并可视化出来，本章主要讲解点云地图的动态加载原理及实现过程，最后说明动态加载需要注意的一些问题．水平有限，难免有错误和疏漏，可在文章下方评论说明．
 
-![image-20200121102920572](39dynamic_map_loader/image-20200121102920572.png)
+![image-20200121102920572](39dynamic_map_loader.assets/image-20200121102920572.png)
 
 <!-- more-->
 
@@ -17,7 +17,7 @@
 > 举例子，当前的网格size为100米，当前汽车的XY位置为(340，210)，首先可以确定汽车当前位置所在网格左下角坐标为(300，200)，这样我们就可以很轻松得根据PCD文件名加载当前的网格点云．之后根据margin大小，以当前网格的四个顶点坐标为基准，向四周扩展margin范围，将此范围内的所有网格地图加载出来即可．如图，最多加载9块，要加载的区域是x_min-margin，x_max+margin，y_min-margin，y_max+margin
 >
 
-## ![xy](39dynamic_map_loader/xy.jpg)二、实现过程
+## ![xy](39dynamic_map_loader.assets/xy.jpg)二、实现过程
 
 由于这部分的工程基本上没什么难度，我将主要在代码注释里面加以说明
 
@@ -274,7 +274,7 @@ ins_pub.publish(odom);
 
 ## 三、最终效果及评价
 
-![image-20200121154246788](39dynamic_map_loader/image-20200121154246788.png)
+![image-20200121154246788](39dynamic_map_loader.assets/image-20200121154246788.png)
 
 **最终效果**
 

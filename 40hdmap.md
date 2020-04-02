@@ -12,7 +12,7 @@
 
 ​	本篇我们将参考Autoware VectorMap，熟悉其格式结构，并进行一定程度的修改，根据我们当前测试场地的一些元素，制作自己的高精地图。在本篇之前，需要对高精地图的概念有一定程度的了解，这部分可以参考我之前整理的几篇博客。
 
-![image-20200120124307911](40hdmap/image-20200120124307911.png)
+![image-20200120124307911](40hdmap.assets/image-20200120124307911.png)
 <!-- more-->
 <a href="http://xchu.net/2019/09/27/HDMAP%E5%BB%BA%E5%9B%BE%E6%B5%81%E7%A8%8B/"  class="LinkCard">HDMap建图流程</a>
 <a href="http://xchu.net/2019/09/28/hdmap%E5%88%86%E5%B1%82/" class="LinkCard">HDMap图层</a>
@@ -36,7 +36,7 @@
 
   ​	支持目前的主流地图格式，可导入导出如Apollo Opendrive/标准Opendrive/Autoware VectorMap/Lanelet2等地图，缺点是不支持直接标注点云PCD，目前只能标注LGSVL提供的一些虚拟环境，使用上是完全开源的。
 
-  ![](40hdmap/hdmap1.jpg)
+  ![](40hdmap.assets/hdmap1.jpg)
 
 - ` Autocore MapToolBox`插件
 
@@ -65,7 +65,7 @@
 
 这里需要注意的是，底图目前建议使用**稠密地图，并且是拼接关键帧而成**（非特征点地图），还需要有强度信息，这样使得纹理效果更明显，方便标注。如下图是velodyne 16线激光雷达构建的稠密点云地图，地标和车道线还算明显，建议还是**需要用高线束激光雷达建图**。
 
-![](40hdmap/12345.png)
+![](40hdmap.assets/12345.png)
 
 这里挖个坑，把LEGO-LOAM构建点云地图的代码贴出来：
 
@@ -102,21 +102,21 @@
 
 ​	这里注意下载的Unity版本需2019.3+，插件使用方式在youtube上搜索`Vector Map Autocore ` 即可找到详细的视频介绍。标注完成的都是有序的点云，这个对比自动提取的算法而言非常方便。这之后会生成一系列的cvs文件，这些就是高精地图的数据文件，格式参考Lanelets。
 
-![](40hdmap/hdmap6.png)
+![](40hdmap.assets/hdmap6.png)
 
 这个插件老版本的效果如下：
 
-![image-20200315215630685](40hdmap/image-20200315215630685.png)
+![image-20200315215630685](40hdmap.assets/image-20200315215630685.png)
 
 开发者标注完成的一部分地图，包含车道线、路沿、停止线、人行横道、交通灯、车道。
 
-![](40hdmap/hdmap4.png)
+![](40hdmap.assets/hdmap4.png)
 
 我自己粗略的标注了楼下的一段路口，只有车道线，效果如下：
 
-![](40hdmap/HDMAP.png)
+![](40hdmap.assets/HDMAP.png)
 
-![](40hdmap/HDMAP2.png)
+![](40hdmap.assets/HDMAP2.png)
 
 #### 制作Apollo Opendrive地图	
 
@@ -128,15 +128,15 @@
 
 - 利用RoadRunner标准点云PCD，导出标准Opendrive地图，采用LGSVL模拟器将标准Opendrive转换到Apollo Opendrive地图。此步骤已验证，示例标注的Apollo Opendrive地图如下
 
-  ![](40hdmap/hdmap3.jpg)
+  ![](40hdmap.assets/hdmap3.jpg)
 
 - 由于目前支撑Opendrive的开源lib库很少，可以利用其他的开源地图框架，生成高精地图之后再转换为Apollo Opendrive格式。这里目前可选择的仅仅是Liblanelets/Lanlets2，按照Lanlets2的接口规范可以生成OSM地图，在用开源的JSOM编辑器编辑完OSM地图后，再转换成Apollo Opendrive地图，一步转换流程有开源的代码可以参考，测试效果如下图所示，第一张是Lanelet2地图，第二张是转换之后的标准opendrive地图。可以看到此套代码，目前主要是就车道部分进行了转换，其他元素暂未考虑，不过主要问题已经解决了，修改下转换代码，将车道部分在曲线上采样，即可从标准Opendrive转换到Apollo Opendrive。
 
 > https://github.com/JHMeusener/osm2xodr.git
 
-![lanlet](40hdmap/lanlet.jpg)
+![lanlet](40hdmap.assets/lanlet.jpg)
 
-![open](40hdmap/open.png)
+![open](40hdmap.assets/open.png)
 
 ### 地图数据存储
 
@@ -282,15 +282,15 @@ Vector convertGeomQuaternionToVector(const geometry_msgs::Quaternion &geom_quate
 
 csv文件编号，用来统计数据文件序号，无用
 
-![image-20200120140044415](40hdmap/image-20200120140044415.png)
+![image-20200120140044415](40hdmap.assets/image-20200120140044415.png)
 
 #### Point
 
 记录所有的点云的blh和xy值 ，并用pid唯一编号，这里xy为utm坐标值（当然也可以是enu坐标），后面几个字段意义不明显，为保留字段。
 
-![image-20200120141229855](40hdmap/image-20200120141229855.png)
+![image-20200120141229855](40hdmap.assets/image-20200120141229855.png)
 
-![image-20200120140835642](40hdmap/image-20200120140835642.png)
+![image-20200120140835642](40hdmap.assets/image-20200120140835642.png)
 
 可视化时,我们用球体来表示point
 
@@ -316,7 +316,7 @@ visualization_msgs::Marker createPointMarker(const std::string &ns, int id, Colo
 
 #### Vector
 
-![image-20200401144207819](40hdmap/image-20200401144207819.png)
+![image-20200401144207819](40hdmap.assets/image-20200401144207819.png)
 
 用vid唯一标志 ，vector表示矢量，即有方向，就是当前点到原点的向量，其中hang和vang分别表示此矢量的水平角度和垂直角度和姿态之间的转换关系．在marker中一般用箭头来描述，用来表示红绿灯等元素。
 
@@ -325,9 +325,9 @@ hang=90-yaw
 vang=pitch+90
 ```
 
-![image-20200120141319355](40hdmap/image-20200120141319355.png)
+![image-20200120141319355](40hdmap.assets/image-20200120141319355.png)
 
-![image-20200120140236396](40hdmap/image-20200120140236396.png)
+![image-20200120140236396](40hdmap.assets/image-20200120140236396.png)
 ```c++
 visualization_msgs::Marker createVectorMarker(const std::string &ns, int id, Color color, const VectorMap &vmap, const Vector &vector) {
     visualization_msgs::Marker marker = createMarker(ns, id, visualization_msgs::Marker::ARROW);//箭头
@@ -354,13 +354,13 @@ visualization_msgs::Marker createVectorMarker(const std::string &ns, int id, Col
 
 #### Line
 
-![image-20200401144257280](40hdmap/image-20200401144257280.png)
+![image-20200401144257280](40hdmap.assets/image-20200401144257280.png)
 
 line表示线段，图中的黄线，白线，路沿均以此来描述，用lid来唯一标志，bpid和fpid指的是连线的两个端点的id,blid和flid表示线段之间的关联关系,分别是上一条和下一条线段的lid，若blid=0的话需要设定起点，flid是其关联的下一条线的id。
 
-![image-20200120141440248](40hdmap/image-20200120141440248.png)
+![image-20200120141440248](40hdmap.assets/image-20200120141440248.png)
 
-![image-20200120140343772](40hdmap/image-20200120140343772.png)
+![image-20200120140343772](40hdmap.assets/image-20200120140343772.png)
 
 ```c++
  visualization_msgs::Marker createLineMarker(const std::string &ns, int id, Color color, const VectorMap &vmap, const Line &line) {
@@ -394,9 +394,9 @@ line表示线段，图中的黄线，白线，路沿均以此来描述，用lid�
 
 area用来描述区域,由连续的按顺序排列的线段组成,其中aid是其唯一标识,slid和elid分别为当前area的start_line和end_line的id,中间的线段按顺序查找line的关联id即可.
 
-![image-20200120141455949](40hdmap/image-20200120141455949.png)
+![image-20200120141455949](40hdmap.assets/image-20200120141455949.png)
 
-![image-20200120140110874](40hdmap/image-20200120140110874.png)
+![image-20200120140110874](40hdmap.assets/image-20200120140110874.png)
 
 ```c++
  visualization_msgs::Marker createAreaMarker(const std::string &ns, int id, Color color, const VectorMap &vmap, const Area &area) {
@@ -455,9 +455,9 @@ area用来描述区域,由连续的按顺序排列的线段组成,其中aid是�
 
 ploe用来表示杆，杆也有多种分类，比如路灯杆、交通灯杆和路牌杆，在marker中用圆柱体来描述。plid指pole的唯一id，vid指pole对应的vector id，length指pole的高度，dim指pole的底面圆半径
 
-![image-20200120150312880](40hdmap/image-20200120150312880.png)
+![image-20200120150312880](40hdmap.assets/image-20200120150312880.png)
 
-![image-20200120150250909](40hdmap/image-20200120150250909.png)
+![image-20200120150250909](40hdmap.assets/image-20200120150250909.png)
 
 ```c++
  visualization_msgs::Marker createPoleMarker(const std::string &ns, int id, Color color, const VectorMap &vmap,const Pole &pole) {
@@ -500,7 +500,7 @@ ploe用来表示杆，杆也有多种分类，比如路灯杆、交通灯杆和�
 
 因为还未见过可视化的样子,目测是底面四个顶点+高度描述.
 
-![](40hdmap/TIM%E5%9B%BE%E7%89%8720200214124211.png)
+![](40hdmap.assets/TIM%E5%9B%BE%E7%89%8720200214124211.png)
 
 ```c++
  visualization_msgs::Marker createBoxMarker(const std::string &ns, int id, Color color, const VectorMap &vmap, const Box &box) {
@@ -571,21 +571,21 @@ ploe用来表示杆，杆也有多种分类，比如路灯杆、交通灯杆和�
 
 #### Node
 
-![image-20200120141556745](40hdmap/image-20200120141556745.png)
+![image-20200120141556745](40hdmap.assets/image-20200120141556745.png)
 
-![image-20200120140309261](40hdmap/image-20200120140309261.png)
+![image-20200120140309261](40hdmap.assets/image-20200120140309261.png)
 
 #### Lane
 
-![image-20200120141212628](40hdmap/image-20200120141212628.png)
+![image-20200120141212628](40hdmap.assets/image-20200120141212628.png)
 
-![image-20200120140443505](40hdmap/image-20200120140443505.png)
+![image-20200120140443505](40hdmap.assets/image-20200120140443505.png)
 
 #### Dtlane
 
-![image-20200120141147560](40hdmap/image-20200120141147560.png)
+![image-20200120141147560](40hdmap.assets/image-20200120141147560.png)
 
-![image-20200120140550324](40hdmap/image-20200120140550324.png)
+![image-20200120140550324](40hdmap.assets/image-20200120140550324.png)
 
 ### 主要元素
 
@@ -614,13 +614,13 @@ utility ploe　//电线杆
 
 #### white line
 
-![image-20200401144645972](40hdmap/image-20200401144645972.png)
+![image-20200401144645972](40hdmap.assets/image-20200401144645972.png)
 
 车道线类型包括实线、空心虚线、实心虚线，颜色有白色和黄色，在rviz中用LINE_STRIP来描述.
 
-![image-20200120123722059](40hdmap/image-20200120123722059.png)
+![image-20200120123722059](40hdmap.assets/image-20200120123722059.png)
 
-![image-20200120124218585](40hdmap/image-20200120124218585.png)
+![image-20200120124218585](40hdmap.assets/image-20200120124218585.png)
 
 ```c++
   visualization_msgs::MarkerArray createWhiteLineMarkerArray(const VectorMap &vmap, Color white_color, Color yellow_color) {
@@ -667,13 +667,13 @@ utility ploe　//电线杆
 
 #### stopline
 
-![image-20200401144708135](40hdmap/image-20200401144708135.png)
+![image-20200401144708135](40hdmap.assets/image-20200401144708135.png)
 
 id是stop line的唯一标志,stopline也是用line来描述,rviz中是LINE_STRIP.其中lid指对应的line id,这里我们如何创建一条stop_line,并在rviz中观察到上图的可视化效果呢?
 
-![image-20200120133852596](40hdmap/image-20200120133852596.png)
+![image-20200120133852596](40hdmap.assets/image-20200120133852596.png)
 
-![image-20200120133931513](40hdmap/image-20200120133931513.png)
+![image-20200120133931513](40hdmap.assets/image-20200120133931513.png)
 ```c++
 visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap, Color color) {
     visualization_msgs::MarkerArray marker_array;
@@ -705,13 +705,13 @@ visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap,
 
 #### road mark
 
-![image-20200401144751289](40hdmap/image-20200401144751289.png)
+![image-20200401144751289](40hdmap.assets/image-20200401144751289.png)
 
 路标有四种类型，arrow、mark、character、sign,最终也是通过area来描述
 
-![image-20200120134514385](40hdmap/image-20200120134514385.png)
+![image-20200120134514385](40hdmap.assets/image-20200120134514385.png)
 
-![image-20200120134656640](40hdmap/image-20200120134656640.png)
+![image-20200120134656640](40hdmap.assets/image-20200120134656640.png)
 ```c++
  visualization_msgs::MarkerArray createRoadMarkMarkerArray(const VectorMap &vmap, Color color) {
         visualization_msgs::MarkerArray marker_array;
@@ -740,13 +740,13 @@ visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap,
 
 #### cross walk
 
-![image-20200401144425841](40hdmap/image-20200401144425841.png)
+![image-20200401144425841](40hdmap.assets/image-20200401144425841.png)
 
 人行横道有三种类型,闭合线,条纹图案和自行车道.cross walk一般也用area来描述,aid是cross_walk的唯一标志,type表示cross walk的类型,
 
-![image-20200120134008724](40hdmap/image-20200120134008724.png)
+![image-20200120134008724](40hdmap.assets/image-20200120134008724.png)
 
-![image-20200120134118776](40hdmap/image-20200120134118776.png)
+![image-20200120134118776](40hdmap.assets/image-20200120134118776.png)
 
 ```c++
  visualization_msgs::MarkerArray createCrossWalkMarkerArray(const VectorMap &vmap, Color color) {
@@ -778,9 +778,9 @@ visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap,
 
 依然用area描述
 
-![image-20200120134234134](40hdmap/image-20200120134234134.png)
+![image-20200120134234134](40hdmap.assets/image-20200120134234134.png)
 
-![image-20200120134309863](40hdmap/image-20200120134309863.png)
+![image-20200120134309863](40hdmap.assets/image-20200120134309863.png)
 
 
 
@@ -812,13 +812,13 @@ visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap,
 
 #### road sign　
 
-![image-20200401144852776](40hdmap/image-20200401144852776.png)
+![image-20200401144852776](40hdmap.assets/image-20200401144852776.png)
 
 表示道路上带杆的方向指示牌,方向用vector描述,杆用pole表示,一般有两种类型,一个是停止标志,另一个是NULL
 
-![image-20200120134737174](40hdmap/image-20200120134737174.png)
+![image-20200120134737174](40hdmap.assets/image-20200120134737174.png)
 
-![image-20200120134827929](40hdmap/image-20200120134827929.png)
+![image-20200120134827929](40hdmap.assets/image-20200120134827929.png)
 
 ```c++
  visualization_msgs::MarkerArray  createRoadSignMarkerArray(const VectorMap &vmap, Color sign_color, Color pole_color) {
@@ -865,15 +865,15 @@ visualization_msgs::MarkerArray createStopLineMarkerArray(const VectorMap &vmap,
 
 #### road pole
 
-![image-20200120134859587](40hdmap/image-20200120134859587.png)
+![image-20200120134859587](40hdmap.assets/image-20200120134859587.png)
 
-![image-20200120134943132](40hdmap/image-20200120134943132.png)
+![image-20200120134943132](40hdmap.assets/image-20200120134943132.png)
 
-![image-20200120135002861](40hdmap/image-20200120135002861.png)
+![image-20200120135002861](40hdmap.assets/image-20200120135002861.png)
 
 #### signal
 
-![image-20200401144917512](40hdmap/image-20200401144917512.png)
+![image-20200401144917512](40hdmap.assets/image-20200401144917512.png)
 
 vid指的是此信号灯对应的vector,plid指其对应的pole
 
@@ -955,38 +955,38 @@ vid指的是此信号灯对应的vector,plid指其对应的pole
 
 
 
-![image-20200120135034537](40hdmap/image-20200120135034537.png)
+![image-20200120135034537](40hdmap.assets/image-20200120135034537.png)
 
-![image-20200120135115439](40hdmap/image-20200120135115439.png)
+![image-20200120135115439](40hdmap.assets/image-20200120135115439.png)
 
 #### curb
 
 
 
-![image-20200120135213315](40hdmap/image-20200120135213315.png)
+![image-20200120135213315](40hdmap.assets/image-20200120135213315.png)
 
-![image-20200120135232695](40hdmap/image-20200120135232695.png)
+![image-20200120135232695](40hdmap.assets/image-20200120135232695.png)
 
 #### road edge
 
-![image-20200120135325666](40hdmap/image-20200120135325666.png)
+![image-20200120135325666](40hdmap.assets/image-20200120135325666.png)
 
-![image-20200120135258133](40hdmap/image-20200120135258133.png)
+![image-20200120135258133](40hdmap.assets/image-20200120135258133.png)
 
 #### gutter
 
-![image-20200120135345714](40hdmap/image-20200120135345714.png)
+![image-20200120135345714](40hdmap.assets/image-20200120135345714.png)
 
-![image-20200120135408597](40hdmap/image-20200120135408597.png)
+![image-20200120135408597](40hdmap.assets/image-20200120135408597.png)
 
 #### streetlight
 
-![image-20200120135629055](40hdmap/image-20200120135629055.png)
+![image-20200120135629055](40hdmap.assets/image-20200120135629055.png)
 
-![image-20200120135503322](40hdmap/image-20200120135503322.png)
+![image-20200120135503322](40hdmap.assets/image-20200120135503322.png)
 
 #### utility pole
 
-![image-20200120135653528](40hdmap/image-20200120135653528.png)
+![image-20200120135653528](40hdmap.assets/image-20200120135653528.png)
 
-![image-20200120135524580](40hdmap/image-20200120135524580.png)
+![image-20200120135524580](40hdmap.assets/image-20200120135524580.png)
